@@ -26,7 +26,8 @@ class _MyAppState extends State<MyApp> {
     initialRoute: '/home',
     routes: {
       '/' :(context) => SplashScreen(),
-      '/home' : (context) => Home()
+      '/home' : (context) => Home(),
+      '/Choice' : (context) => ChoiceScreen()
     },
   );
   }

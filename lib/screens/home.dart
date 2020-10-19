@@ -31,18 +31,25 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void _sendDatas() {
-    fname.text = "testFname";
-    lname.text = "testLname";
-    email.text = "kannan@gmail.com";
-    phone.text = "7904254041";
-    fullAddress.text = "testAddress";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    fname.text = "Yagnesh";
+    lname.text = "Londhe";
+    email.text = "yagnesh.londhe@wwindia.com";
+    phone.text = "9870884171";
+    fullAddress.text = "Mumbai";
     pincode.text = "600011";
     orderId.text = "MAAPP75421598614777";
     amount.text = "1.00";
     city.text = "testCity";
-    state.text = "testState";
-    country.text = "testcountry";
+    state.text = "Maharastra";
+    country.text = "India";
+  }
+
+  void _sendDatas() {
     /* User user = User(username :'8419743',password : 'JRLcAz5Y',secret: '74QpNYaT1oyqhxdL',merchantId : '1',fname : fname.text,
       lname :lname.text, email :email.text,phone :phone.text,fulladdress : full_address.text,
       pincode:pincode.text,orderid: order_id.text,amount: amount.text,city : city.text,state :state.text,country :country.text,
@@ -202,14 +209,23 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Card(
-                  margin: EdgeInsets.all(8.0),
+                  margin: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
                   color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 15.0, 12.0, 15.0),
+                    padding: const EdgeInsets.fromLTRB(12.0, 2.0, 12.0, 15.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Container(
+                    height: 44,
+                    alignment: Alignment.center,
+                    child:
+                     Image.asset(
+                'assets/airpays.png',
+                height: 80,
+                width: 200,
+              ),),
                         Text(
                           'Personal Information',
                           style: TextStyle(
@@ -527,28 +543,28 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.all(8.0),
                   child: RaisedButton(
-                    padding: EdgeInsets.all(12.0),
+                      padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                     onPressed: () {
                       _sendDatas();
                     },
                     color: Colors.blue[900],
                     child: Text(
                       'NEXT',
-                      style: TextStyle(color: Colors.white, fontSize: 24.0),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.all(8.0),
                   child: RaisedButton(
-                    padding: EdgeInsets.all(12.0),
+                      padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     color: Colors.blue[900],
                     child: Text(
-                      'HOME',
-                      style: TextStyle(color: Colors.white, fontSize: 24.0),
+                      'BACK',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 )
