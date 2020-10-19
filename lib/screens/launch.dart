@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -95,7 +97,12 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     child: RaisedButton(
                       padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/home');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Home(isSandbox: true),
+                          ),
+                        );
                       },
                       color: Colors.blue[900],
                       child: Text(
@@ -109,7 +116,12 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     child: RaisedButton(
                       padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/home');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Home(isSandbox: false),
+                          ),
+                        );
                       },
                       color: Colors.blue[900],
                       child: Text(
@@ -119,8 +131,8 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     ),
                   ),
                   SizedBox(
-                height: 40.0,
-              ),
+                    height: 40.0,
+                  ),
                 ],
               )
             ],

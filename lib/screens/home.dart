@@ -6,11 +6,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
+  final bool isSandbox;
+
+  Home({this.isSandbox});
+
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(isSandbox: isSandbox);
 }
 
 class _HomeState extends State<Home> {
+  final bool isSandbox;
+  _HomeState({this.isSandbox});
+
   bool isSuccess = false;
   bool isVisible = false;
   TextEditingController fname = TextEditingController();
@@ -56,11 +63,25 @@ class _HomeState extends State<Home> {
       currency: "356",isCurrency: "INR",chMode: "",customVar: "",txnSubtype: "",wallet: "0",successUrl: "http://www.theroadiesstore.in/airpay/transact/response"
         //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
     );*/
+
+    String domainPath = this.isSandbox
+        ? 'http://www.theroadiesstore.in/airpay/transact/response'
+        : 'https://apmerchantapp.nowpay.co.in/index.html';
+
+    String kAirPaySecretKey = this.isSandbox ? '74QpNYaT1oyqhxdL' : '6UnpYTPm2fBweTKH';
+
+    String kAirPayUserName = this.isSandbox ? '8419743' : '3967423';
+
+    String kAirPayPassword = this.isSandbox ? 'JRLcAz5Y' : 'DtEte24X';
+
+    String merchantID = this.isSandbox ? '1' : '30057';
+
     User user = User(
-        username: '3967423',
-        password: 'DtEte24X',
-        secret: '6UnpYTPm2fBweTKH',
-        merchantId: '30057',
+        username: kAirPayUserName,
+        password: kAirPayPassword,
+        secret: kAirPaySecretKey,
+        merchantId: merchantID,
+        protoDomain: domainPath,
         fname: fname.text,
         lname: lname.text,
         email: email.text,
@@ -88,10 +109,10 @@ class _HomeState extends State<Home> {
                 callback: (val) => () {
                       isSuccess = val;
                       if (isSuccess == true) {
-                        _showAlert(context,"Your payment is successful");
-                      }
-                      else {
-                        _showAlert(context,"Payment has been cancelled or failed");
+                        _showAlert(context, "Your payment is successful");
+                      } else {
+                        _showAlert(
+                            context, "Payment has been cancelled or failed");
                       }
                     })
             /*  builder: (context) => WebViewPlug()*/
@@ -202,6 +223,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Image.asset(
+            'assets/airpays.png',
+            height: 40,
+            color: Colors.white,
+            width: 200,
+          ),
+        ),
         backgroundColor: Colors.grey[400],
         body: SafeArea(
           child: SingleChildScrollView(
@@ -217,15 +247,6 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Container(
-                    height: 44,
-                    alignment: Alignment.center,
-                    child:
-                     Image.asset(
-                'assets/airpays.png',
-                height: 80,
-                width: 200,
-              ),),
                         Text(
                           'Personal Information',
                           style: TextStyle(
@@ -543,7 +564,7 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.all(8.0),
                   child: RaisedButton(
-                      padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
+                    padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                     onPressed: () {
                       _sendDatas();
                     },
@@ -557,7 +578,7 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.all(8.0),
                   child: RaisedButton(
-                      padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
+                    padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                     onPressed: () {
                       Navigator.pop(context);
                     },
