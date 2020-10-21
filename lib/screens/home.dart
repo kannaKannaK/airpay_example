@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:airpay_package/model/user.dart';
 import 'package:airpay_package/screens/inappwebview.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   final bool isSandbox;
-
   Home({this.isSandbox});
 
   @override
@@ -24,13 +22,13 @@ class _HomeState extends State<Home> {
   TextEditingController lname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
-  TextEditingController fullAddress = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController country = TextEditingController();
   TextEditingController pincode = TextEditingController();
   TextEditingController orderId = TextEditingController();
   TextEditingController amount = TextEditingController();
+  TextEditingController fullAddress = TextEditingController();
 
   void _showAddress() {
     setState(() {
@@ -65,16 +63,16 @@ class _HomeState extends State<Home> {
     );*/
 
     String domainPath = this.isSandbox
-        ? 'http://www.theroadiesstore.in/airpay/transact/response'
+        ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://apmerchantapp.nowpay.co.in/index.html';
 
-    String kAirPaySecretKey = this.isSandbox ? '74QpNYaT1oyqhxdL' : '6UnpYTPm2fBweTKH';
+    String kAirPaySecretKey = this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
 
-    String kAirPayUserName = this.isSandbox ? '8419743' : '3967423';
+    String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
 
-    String kAirPayPassword = this.isSandbox ? 'JRLcAz5Y' : 'DtEte24X';
+    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'DtEte24X';
 
-    String merchantID = this.isSandbox ? '1' : '30057';
+    String merchantID = this.isSandbox ? '24516' : '30057';
 
     User user = User(
         username: kAirPayUserName,
@@ -99,7 +97,7 @@ class _HomeState extends State<Home> {
         customVar: "",
         txnSubtype: "",
         wallet: "0",
-        successUrl: "https://retail.airpay.co.in/index.html",
+        successUrl: "https://demo.nascorptechnologies.com/gw/pgResp/airpay",
         failedUrl: "https://retail.airpay.co.in/index.html");
     Navigator.push(
         context,
