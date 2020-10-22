@@ -74,9 +74,13 @@ class _HomeState extends State<Home> {
 
     String merchantID = this.isSandbox ? '24516' : '30057';
 
-    String successURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://retail.airpay.co.in/index.html';
+    String successURL = this.isSandbox
+        ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
+        : 'https://retail.airpay.co.in/index.html';
 
-    String failedURL = this.isSandbox ? 'https://payments.airpay.co.in/error.php' : 'https://payments.airpay.co.in/error.php';
+    String failedURL = this.isSandbox
+        ? 'https://payments.airpay.co.in/error.php'
+        : 'https://payments.airpay.co.in/error.php';
 
     User user = User(
         username: kAirPayUserName,
@@ -109,11 +113,18 @@ class _HomeState extends State<Home> {
         builder: (BuildContext context) => new AirPay(user: user),
       ),
     ).then((val) {
-      isSuccess = val;
-      if (isSuccess == true) {
-        _showAlert(context, "Your payment is successful");
-      } else {
-        _showAlert(context, "Payment has been cancelled or failed");
+      if (val != null) {
+        if (val is bool) {
+          isSuccess = val;
+          if (isSuccess == true) {
+            _showAlert(context, "Your payment is successful");
+          } else {
+            _showAlert(context, "Payment has been cancelled or failed");
+          }
+        } else {
+          _showAlert(context, "Your payment is completed");
+          _showAlert(context, val.toString());
+        }
       }
     });
   }
@@ -345,7 +356,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Card(
-                  margin:EdgeInsets.fromLTRB(8.0, 8, 8.0, 4),
+                  margin: EdgeInsets.fromLTRB(8.0, 8, 8.0, 4),
                   color: Colors.white,
                   child: Padding(
                       padding: EdgeInsets.fromLTRB(8.0, 8, 8.0, 4),
