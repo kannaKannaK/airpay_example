@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
 
     String successURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://retail.airpay.co.in/index.html';
 
-    String failedURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://retail.airpay.co.in/index.html';
+    String failedURL = this.isSandbox ? 'https://payments.airpay.co.in/error.php' : 'https://payments.airpay.co.in/error.php';
 
     User user = User(
         username: kAirPayUserName,
