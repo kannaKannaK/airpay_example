@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
     phone.text = "9870884171";
     fullAddress.text = "Mumbai";
     pincode.text = "600011";
-    orderId.text = "MAAPP75421598614777";
+    orderId.text = "2428";
     amount.text = "1.00";
     city.text = "testCity";
     state.text = "Maharastra";

@@ -6,7 +6,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "1388847c0dea3aea2853579899656e7861e82964"
+      resolved-ref: "4a9c0882a390e748ea53638015e6cceb5fdf8aa6"
       url: "https://github.com/kannaKannaK/airpay_package"
     source: git
     version: "1.0.0"
@@ -111,6 +111,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  loading:
+    dependency: transitive
+    description:
+      name: loading
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   matcher:
     dependency: transitive
     description:
