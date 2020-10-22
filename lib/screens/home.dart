@@ -38,7 +38,6 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     fname.text = "Yagnesh";
@@ -66,7 +65,8 @@ class _HomeState extends State<Home> {
         ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://apmerchantapp.nowpay.co.in/index.html';
 
-    String kAirPaySecretKey = this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
+    String kAirPaySecretKey =
+        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
 
     String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
 
@@ -100,23 +100,21 @@ class _HomeState extends State<Home> {
         successUrl: "https://demo.nascorptechnologies.com/gw/pgResp/airpay",
         failedUrl: "https://retail.airpay.co.in/index.html");
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AirPay(
-                user: user,
-                callback: (val) => () {
-                      isSuccess = val;
-                      if (isSuccess == true) {
-                        _showAlert(context, "Your payment is successful");
-                      } else {
-                        _showAlert(
-                            context, "Payment has been cancelled or failed");
-                      }
-                    })
-            /*  builder: (context) => WebViewPlug()*/
-            ));
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => new AirPay(user: user),
+      ),
+    ).then((val) {
+      isSuccess = val;
+      if (isSuccess == true) {
+        _showAlert(context, "Your payment is successful");
+      } else {
+        _showAlert(context, "Payment has been cancelled or failed");
+      }
+    });
   }
 
+  // ignore: unused_element
   _showLoader(context, message) async {
     await showDialog<String>(
       context: context,
@@ -191,7 +189,7 @@ class _HomeState extends State<Home> {
             : new AlertDialog(
                 title: Text(title),
                 content: new Container(
-                    height: 140.0,
+                    height: 90.0,
                     child: new Column(
                       children: [
                         Text(message1),
