@@ -66,15 +66,17 @@ class _HomeState extends State<Home> {
         : 'https://apmerchantapp.nowpay.co.in/index.html';
 
     String kAirPaySecretKey =
-        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '74QpNYaT1oyqhxdL';
+        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
 
-    String kAirPayUserName = this.isSandbox ? '2953945' : '8419743';
+    String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
 
-    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'JRLcAz5Y';
+    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'DtEte24X';
 
-    String merchantID = this.isSandbox ? '24516' : '1';
+    String merchantID = this.isSandbox ? '24516' : '30057';
 
-    String successURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://devel-ma.airpayme.com/airpay_php/responsefromairpay.php';
+    String successURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://retail.airpay.co.in/index.html';
+
+    String failedURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://retail.airpay.co.in/index.html';
 
     User user = User(
         username: kAirPayUserName,
@@ -100,7 +102,7 @@ class _HomeState extends State<Home> {
         txnSubtype: "",
         wallet: "0",
         successUrl: successURL,
-        failedUrl: "https://retail.airpay.co.in/index.html");
+        failedUrl: failedURL);
     Navigator.push(
       context,
       MaterialPageRoute(
