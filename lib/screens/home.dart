@@ -66,13 +66,15 @@ class _HomeState extends State<Home> {
         : 'https://apmerchantapp.nowpay.co.in/index.html';
 
     String kAirPaySecretKey =
-        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
+        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '74QpNYaT1oyqhxdL';
 
-    String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
+    String kAirPayUserName = this.isSandbox ? '2953945' : '8419743';
 
-    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'DtEte24X';
+    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'JRLcAz5Y';
 
-    String merchantID = this.isSandbox ? '24516' : '30057';
+    String merchantID = this.isSandbox ? '24516' : '1';
+
+    String successURL = this.isSandbox ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay' : 'https://devel-ma.airpayme.com/airpay_php/responsefromairpay.php';
 
     User user = User(
         username: kAirPayUserName,
@@ -97,7 +99,7 @@ class _HomeState extends State<Home> {
         customVar: "",
         txnSubtype: "",
         wallet: "0",
-        successUrl: "https://demo.nascorptechnologies.com/gw/pgResp/airpay",
+        successUrl: successURL,
         failedUrl: "https://retail.airpay.co.in/index.html");
     Navigator.push(
       context,
@@ -196,7 +198,7 @@ class _HomeState extends State<Home> {
                         new Container(
                           margin: EdgeInsets.all(8.0),
                           child: RaisedButton(
-                            padding: EdgeInsets.all(12.0),
+                            padding: EdgeInsets.all(2.0),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -235,7 +237,7 @@ class _HomeState extends State<Home> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Card(
-                  margin: EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
+                  margin: EdgeInsets.fromLTRB(8.0, 8, 8.0, 4),
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(12.0, 2.0, 12.0, 15.0),
@@ -341,10 +343,10 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Card(
-                  margin: EdgeInsets.all(8.0),
+                  margin:EdgeInsets.fromLTRB(8.0, 8, 8.0, 4),
                   color: Colors.white,
                   child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(8.0, 8, 8.0, 4),
                       child: Column(
                         children: [
                           Row(
