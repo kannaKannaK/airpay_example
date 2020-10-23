@@ -62,6 +62,8 @@ class _HomeState extends State<Home> {
         //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
     );*/
 
+    user.isStaging = true;
+
     String domainPath = this.isSandbox
         ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://apmerchantapp.nowpay.co.in/index.html';
@@ -78,10 +80,6 @@ class _HomeState extends State<Home> {
     String successURL = this.isSandbox
         ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://retail.airpay.co.in/index.html';
-
-    String failedURL = this.isSandbox
-        ? 'https://payments.airpay.co.in/error.php'
-        : 'https://payments.airpay.co.in/error.php';
 
     UserRequest user = UserRequest(
         username: kAirPayUserName,
