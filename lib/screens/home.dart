@@ -62,8 +62,6 @@ class _HomeState extends State<Home> {
         //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
     );*/
 
-    user.isStaging = true;
-
     String domainPath = this.isSandbox
         ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://apmerchantapp.nowpay.co.in/index.html';
@@ -104,8 +102,8 @@ class _HomeState extends State<Home> {
         customVar: "",
         txnSubtype: "",
         wallet: "0",
-        successUrl: successURL,
-        failedUrl: failedURL);
+        isStaging: false, //True for the Staging
+        successUrl: successURL);
     Navigator.push(
       context,
       MaterialPageRoute(

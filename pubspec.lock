@@ -6,7 +6,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "5a3d519f1884e475521b314d806cd8930a6e329d"
+      resolved-ref: c8a224e426928f13ecdd8990af25be33d846199d
       url: "https://github.com/kannaKannaK/airpay_package"
     source: git
     version: "1.0.0"
