@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
 
     String successURL = this.isSandbox
         ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
-        : 'https://retail.airpay.co.in/index.html';
+        : 'https://retail.airpay.co.in/index.html'; //https://secure.airpay.co.in/
 
     UserRequest user = UserRequest(
         username: kAirPayUserName,
