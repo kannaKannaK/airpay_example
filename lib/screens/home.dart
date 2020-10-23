@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:airpay_package/model/user.dart';
+import 'package:airpay_package/model/UserRequest.dart';
 import 'package:airpay_package/screens/inappwebview.dart';
+import 'package:alert_dialog/alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -82,7 +83,7 @@ class _HomeState extends State<Home> {
         ? 'https://payments.airpay.co.in/error.php'
         : 'https://payments.airpay.co.in/error.php';
 
-    User user = User(
+    UserRequest user = UserRequest(
         username: kAirPayUserName,
         password: kAirPayPassword,
         secret: kAirPaySecretKey,
@@ -121,9 +122,14 @@ class _HomeState extends State<Home> {
           } else {
             _showAlert(context, "Payment has been cancelled or failed");
           }
-        } else {
-          _showAlert(context, "Your payment is completed");
-          _showAlert(context, val.toString());
+        } else if (val.sTATUS != null) {
+          if (val.sTATUS == '200') {
+            _showAlert(context, "Your payment is successful");
+          } else {
+            _showAlert(
+                context, "Your payment is failed \n ${val.tRANSACTIONREASON}");
+          }
+          _showAlert(context, '${val.toJson()}');
         }
       }
     });
@@ -152,22 +158,11 @@ class _HomeState extends State<Home> {
                   )
                 ],
               )
-            : new AlertDialog(
+            : alert(
+                context,
                 title: Text(title),
-                content: new Container(
-                    height: 140.0,
-                    child: new Column(
-                      children: [
-                        Text(message1),
-                        new Container(
-                          // color: Colors.white60,
-                          alignment: Alignment.center,
-                          height: 80.0,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
-                    )),
-                actions: <Widget>[],
+                content: Text(message1),
+                textOK: Text('Okay'),
               );
       },
     );
@@ -204,27 +199,25 @@ class _HomeState extends State<Home> {
             : new AlertDialog(
                 title: Text(title),
                 content: new Container(
-                    height: 90.0,
                     child: new Column(
-                      children: [
-                        Text(message1),
-                        new Container(
-                          margin: EdgeInsets.all(8.0),
-                          child: RaisedButton(
-                            padding: EdgeInsets.all(2.0),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Colors.blue[900],
-                            child: Text(
-                              'Okay',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 24.0),
-                            ),
-                          ),
-                        )
-                      ],
-                    )),
+                  children: [
+                    Text(message1),
+                    new Container(
+                      margin: EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                        padding: EdgeInsets.all(2.0),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        color: Colors.blue[900],
+                        child: Text(
+                          'Okay',
+                          style: TextStyle(color: Colors.white, fontSize: 24.0),
+                        ),
+                      ),
+                    )
+                  ],
+                )),
                 actions: <Widget>[],
               );
       },
@@ -242,6 +235,7 @@ class _HomeState extends State<Home> {
             color: Colors.white,
             width: 200,
           ),
+          backgroundColor: Colors.blue[900],
         ),
         backgroundColor: Colors.grey[400],
         body: SafeArea(
