@@ -195,25 +195,27 @@ class _HomeState extends State<Home> {
             : new AlertDialog(
                 title: Text(title),
                 content: new Container(
+                    height: 110,
                     child: new Column(
-                  children: [
-                    Text(message1),
-                    new Container(
-                      margin: EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(2.0),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        color: Colors.blue[900],
-                        child: Text(
-                          'Okay',
-                          style: TextStyle(color: Colors.white, fontSize: 24.0),
-                        ),
-                      ),
-                    )
-                  ],
-                )),
+                      children: [
+                        Text(message1),
+                        new Container(
+                          margin: EdgeInsets.all(8.0),
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(2.0),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            color: Colors.blue[900],
+                            child: Text(
+                              'Okay',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 24.0),
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
                 actions: <Widget>[],
               );
       },
