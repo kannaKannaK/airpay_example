@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:airpay_package/model/UserRequest.dart';
-import 'package:airpay_package/screens/inappwebview.dart';
+import 'package:airpay_example/airPay.dart';
 import 'package:alert_dialog/alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +51,21 @@ class _HomeState extends State<Home> {
     city.text = "testCity";
     state.text = "Maharastra";
     country.text = "India";
+  }
+
+  onComplete(status, response) {
+    Navigator.pop(context);
+    if (status == true) {
+      if (response.sTATUS == '200') {
+        _showAlert(context, "Your payment is successful");
+      } else {
+        _showAlert(context,
+            "Your payment is failed due to \n ${response.tRANSACTIONREASON}");
+      }
+    } else {
+      _showAlert(context, "This payment is failed");
+    }
+    _showAlert(context, '${response.toJson()}');
   }
 
   void _sendDatas() {
@@ -107,28 +121,11 @@ class _HomeState extends State<Home> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => new AirPay(user: user),
+        builder: (BuildContext context) => new AirPay(
+            user: user,
+            closure: (status, response) => {onComplete(status, response)}),
       ),
-    ).then((val) {
-      if (val != null) {
-        if (val is bool) {
-          isSuccess = val;
-          if (isSuccess == true) {
-            _showAlert(context, "Your payment is successful");
-          } else {
-            _showAlert(context, "Payment has been cancelled or failed");
-          }
-        } else if (val.sTATUS != null) {
-          if (val.sTATUS == '200') {
-            _showAlert(context, "Your payment is successful");
-          } else {
-            _showAlert(
-                context, "Your payment is failed \n ${val.tRANSACTIONREASON}");
-          }
-          _showAlert(context, '${val.toJson()}');
-        }
-      }
-    });
+    );
   }
 
   // ignore: unused_element
@@ -194,29 +191,33 @@ class _HomeState extends State<Home> {
               )
             : new AlertDialog(
                 title: Text(title),
-                content: new Container(
-                    height: 110,
-                    child: new Column(
-                      children: [
-                        Text(message1),
-                        new Container(
-                          margin: EdgeInsets.all(8.0),
-                          child: RaisedButton(
-                            padding: EdgeInsets.all(2.0),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Colors.blue[900],
-                            child: Text(
-                              'Okay',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 24.0),
-                            ),
-                          ),
-                        )
-                      ],
-                    )),
-                actions: <Widget>[],
+                content: Container(
+                    height: 140.0,
+                    width: 400.0,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          return new Column(children: <Widget>[
+                            Text(message1),
+                          ]);
+                        })),
+                actions: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      padding: EdgeInsets.all(2.0),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: Colors.blue[900],
+                      child: Text(
+                        'Okay',
+                        style: TextStyle(color: Colors.white, fontSize: 24.0),
+                      ),
+                    ),
+                  )
+                ],
               );
       },
     );
