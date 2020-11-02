@@ -461,11 +461,17 @@ class _AirPayState extends State<AirPay> {
                     initialData: InAppWebViewInitialData(
                       data: loadData(),
                     ),
+                    initialHeaders: {},
                     initialOptions: InAppWebViewGroupOptions(
-                        crossPlatform: InAppWebViewOptions(
-                      debuggingEnabled: true,
-                      javaScriptEnabled: true,
-                    )),
+                      crossPlatform: InAppWebViewOptions(
+                        debuggingEnabled: true,
+                        useShouldOverrideUrlLoading: true,
+                      ),
+                      android: AndroidInAppWebViewOptions(
+                       // useOnRenderProcessGone: true,
+                        // useHybridComposition: true,
+                      )
+                    ),
                     onTitleChanged:
                         (InAppWebViewController controller, String url) {
                       setState(() {
