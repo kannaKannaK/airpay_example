@@ -118,6 +118,31 @@ class _HomeState extends State<Home> {
         wallet: "0",
         isStaging: false, //True for the Staging
         successUrl: successURL);
+
+        String errMsg = "";
+if (user.secret.isEmpty) {
+  errMsg = 'Enter your AirPay Secret Key in kAirPaySecretKey';
+}
+else if (user.merchantId.isEmpty) {
+  errMsg = 'Enter your AirPay MerchantID';
+}
+else if (user.password.isEmpty) {
+  errMsg = 'Enter your AirPay password';
+}
+else if (user.username.isEmpty) {
+  errMsg = 'Enter your AirPay Username';
+}
+else if (user.successUrl.isEmpty) {
+  errMsg = 'Enter your AirPay successUrl';
+}
+else if (user.protoDomain.isEmpty) {
+  errMsg = 'Enter your AirPay protoDomain';
+}
+if (errMsg.isNotEmpty) {
+    _showAlert(context, errMsg + '\n to proceed with the demo app you must enter the required details to proceed.');
+    return;
+}
+
     Navigator.push(
       context,
       MaterialPageRoute(
