@@ -4,11 +4,9 @@ packages:
   airpay_package:
     dependency: "direct main"
     description:
-      path: "."
-      ref: main
-      resolved-ref: c8a224e426928f13ecdd8990af25be33d846199d
-      url: "https://github.com/kannaKannaK/airpay_package"
-    source: git
+      name: airpay_package
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.0"
   alert_dialog:
     dependency: "direct main"
@@ -99,13 +97,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_inappwebview:
-    dependency: transitive
-    description:
-      name: flutter_inappwebview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0+4"
   flutter_spinkit:
     dependency: transitive
     description:
@@ -146,13 +137,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.4"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.7"
   path:
     dependency: transitive
     description:
@@ -221,13 +205,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.3"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.2"
   vector_math:
     dependency: transitive
     description:
@@ -241,7 +218,7 @@ packages:
       name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.7"
   xml:
     dependency: transitive
     description:
