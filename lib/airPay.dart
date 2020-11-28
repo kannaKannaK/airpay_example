@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:convert';
 import 'package:xml2json/xml2json.dart';
 
@@ -251,19 +252,38 @@ class AirPay extends StatefulWidget {
 class _AirPayState extends State<AirPay> {
   // var URL = 'https://google.com.tr';
   String url = "";
-  double progress = 0;
   var postdata = "";
-  bool isShow = true;
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
+  num _stackToView = 1;
+  var payURL = '';
+  bool isFirst = true;
+
+  void _handleLoad(int index) {
+    setState(() {
+      _stackToView = index;
+    });
+  }
 
   String loadData() {
-    var date = new DateTime.now();var format = DateFormat("yyyy-MM-dd");var formattedDate = format.format(date);var temp = utf8.encode(
-        '${widget.user.secret}@${widget.user.username}:|:${widget.user.password}');var privatekey = sha256.convert(temp);var setAllData = utf8.encode(
-        '${widget.user.email}${widget.user.fname}${widget.user.lname}${widget.user.fulladdress}${widget.user.city}${widget.user.state}${widget.user.country}${widget.user.amount}${widget.user.orderid}$formattedDate$privatekey');var checksum = md5.convert(setAllData);var protocolDomain = getProtoDomain(widget.user.protoDomain);
-    List<int> bytes = ascii.encode(protocolDomain);var encoded = base64.encode(bytes);var user = widget.user;
-
-    String productionURL = "https://payments.airpay.co.in/pay/index.php";String productionFailedURL = "https://payments.airpay.co.in/error.php";
-  // String productionVPAURL = "https://payments.airpay.co.in/upi/v.php";
-    String stagingURL = "https://payments.airpay.ninja/pay/index.php";String stagingFailedURL = "https://payments.airpay.ninja/error.php";
+    var date = new DateTime.now();
+    var format = DateFormat("yyyy-MM-dd");
+    var formattedDate = format.format(date);
+    var temp = utf8.encode(
+        '${widget.user.secret}@${widget.user.username}:|:${widget.user.password}');
+    var privatekey = sha256.convert(temp);
+    var setAllData = utf8.encode(
+        '${widget.user.email}${widget.user.fname}${widget.user.lname}${widget.user.fulladdress}${widget.user.city}${widget.user.state}${widget.user.country}${widget.user.amount}${widget.user.orderid}$formattedDate$privatekey');
+    var checksum = md5.convert(setAllData);
+    var protocolDomain = getProtoDomain(widget.user.protoDomain);
+    List<int> bytes = ascii.encode(protocolDomain);
+    var encoded = base64.encode(bytes);
+    var user = widget.user;
+    String productionURL = "https://payments.airpay.co.in/pay/index.php";
+    String productionFailedURL = "https://payments.airpay.co.in/error.php";
+    // String productionVPAURL = "https://payments.airpay.co.in/upi/v.php";
+    String stagingURL = "https://payments.airpay.ninja/pay/index.php";
+    String stagingFailedURL = "https://payments.airpay.ninja/error.php";
     // String stagingVPAURL = "https://payments.airpay.ninja/upi/v.php";
 
     var isGateWay = (user.isStaging != null && user.isStaging == true)
@@ -273,8 +293,46 @@ class _AirPayState extends State<AirPay> {
         ? stagingFailedURL
         : productionFailedURL;
 
-    var url = "<!DOCTYPE html>" + "<html>" + "<body onload='document.frm1.submit()'>" + "<form action='$isGateWay' method='post' name='frm1'>" + "  <input type='hidden' name='mer_dom' value='$encoded'><br>" + "  <input type='hidden' name='currency' value='${user.currency}'><br>" + "  <input type='hidden' name='isocurrency' value='${user.isCurrency}'><br>" + "  <input type='hidden' name='orderid' value='${user.orderid}'><br>" + "  <input type='hidden' name='privatekey' value='$privatekey'><br>" + "  <input type='hidden' name='checksum' value='$checksum'><br>" + "  <input type='hidden' name='mercid' value='${user.merchantId}'><br>" + "  <input type='hidden' name='buyerEmail' value='${user.email}'><br>" + "  <input type='hidden' name='buyerPhone' value='${user.phone}'><br>" + "  <input type='hidden' name='buyerFirstName' value='${user.fname}'><br>" + "  <input type='hidden' name='buyerLastName' value='${user.lname}'><br>" + "  <input type='hidden' name='buyerAddress' value='${user.fulladdress}'><br>" + "  <input type='hidden' name='buyerCity' value='${user.city}'><br>" + "  <input type='hidden' name='buyerState' value='${user.state}'><br>" + "  <input type='hidden' name='buyerCountry' value='${user.country}'><br>" + "  <input type='hidden' name='buyerPinCode' value='${user.pincode}'><br>" + "  <input type='hidden' name='amount' value='${user.amount}'><br>" + "  <input type='hidden' name='chmod' value='${user.chMode}'><br>" + "  <input type='hidden' name='customvar' value='${user.customVar}'><br>" + "  <input type='hidden' name='txnsubtype' value='${user.txnSubtype}'><br>" + "  <input type='hidden' name='token' value=''><br>" + "  <input type='hidden' name='txnsubtype' value='${user.txnSubtype}'><br>" + "</form>" + "</body>" + "</html>";
+    var url = "<!DOCTYPE html>" +
+        "<html>" +
+        "<body onload='document.frm1.submit()'>" +
+        "<form action='$isGateWay' method='post' name='frm1'>" +
+        "  <input type='hidden' name='mer_dom' value='$encoded'><br>" +
+        "  <input type='hidden' name='currency' value='${user.currency}'><br>" +
+        "  <input type='hidden' name='isocurrency' value='${user.isCurrency}'><br>" +
+        "  <input type='hidden' name='orderid' value='${user.orderid}'><br>" +
+        "  <input type='hidden' name='privatekey' value='$privatekey'><br>" +
+        "  <input type='hidden' name='checksum' value='$checksum'><br>" +
+        "  <input type='hidden' name='mercid' value='${user.merchantId}'><br>" +
+        "  <input type='hidden' name='buyerEmail' value='${user.email}'><br>" +
+        "  <input type='hidden' name='buyerPhone' value='${user.phone}'><br>" +
+        "  <input type='hidden' name='buyerFirstName' value='${user.fname}'><br>" +
+        "  <input type='hidden' name='buyerLastName' value='${user.lname}'><br>" +
+        "  <input type='hidden' name='buyerAddress' value='${user.fulladdress}'><br>" +
+        "  <input type='hidden' name='buyerCity' value='${user.city}'><br>" +
+        "  <input type='hidden' name='buyerState' value='${user.state}'><br>" +
+        "  <input type='hidden' name='buyerCountry' value='${user.country}'><br>" +
+        "  <input type='hidden' name='buyerPinCode' value='${user.pincode}'><br>" +
+        "  <input type='hidden' name='amount' value='${user.amount}'><br>" +
+        "  <input type='hidden' name='chmod' value='${user.chMode}'><br>" +
+        "  <input type='hidden' name='customvar' value='${user.customVar}'><br>" +
+        "  <input type='hidden' name='txnsubtype' value='${user.txnSubtype}'><br>" +
+        "  <input type='hidden' name='token' value=''><br>" +
+        "  <input type='hidden' name='txnsubtype' value='${user.txnSubtype}'><br>" +
+        "</form>" +
+        "</body>" +
+        "</html>";
     return url;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _handleLoad(1);
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    this.payURL = Uri.dataFromString(loadData(),
+            mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
+        .toString();
   }
 
   String getProtoDomain(String sDomain) {
@@ -286,18 +344,25 @@ class _AirPayState extends State<AirPay> {
     var user = widget.user;
 
     String stagingDataURL = "https://payments.airpay.ninja/sdk/a.php";
-    String productionDataURL = "https://payments.airpay.co.in/sdk/a.php";var isGateWay = (user.isStaging != null && user.isStaging == true)
+    String productionDataURL = "https://payments.airpay.co.in/sdk/a.php";
+    var isGateWay = (user.isStaging != null && user.isStaging == true)
         ? stagingDataURL
         : productionDataURL;
 
-    String urlString = isGateWay;var date = new DateTime.now();var format = DateFormat("dd/MM/yyyy HH:mm:ss");var formattedDate = format.format(date);
-    format = DateFormat("yyyy HH:mm:ss");var formattedDate2 = format.format(date);
+    String urlString = isGateWay;
+    var date = new DateTime.now();
+    var format = DateFormat("dd/MM/yyyy HH:mm:ss");
+    var formattedDate = format.format(date);
+    format = DateFormat("yyyy HH:mm:ss");
+    var formattedDate2 = format.format(date);
 
     var temp = utf8.encode(
-        '${widget.user.secret}@${widget.user.username}:|:${widget.user.password}');var privatekey = sha256.convert(temp);
+        '${widget.user.secret}@${widget.user.username}:|:${widget.user.password}');
+    var privatekey = sha256.convert(temp);
 
     var setAllData = utf8.encode(
-        '$privatekey${widget.user.orderid}${widget.user.merchantId}$formattedDate2');var checksum = md5.convert(setAllData);
+        '$privatekey${widget.user.orderid}${widget.user.merchantId}$formattedDate2');
+    var checksum = md5.convert(setAllData);
 
     FormData formData = new FormData.fromMap({
       'privatekey': privatekey,
@@ -312,9 +377,12 @@ class _AirPayState extends State<AirPay> {
 
     var response = await dio.post(urlString, data: formData);
     print(response);
-    final myTransformer = Xml2Json();var stingDAta = response.data.toString();
+    final myTransformer = Xml2Json();
+    var stingDAta = response.data.toString();
     stingDAta = stingDAta.replaceAll("<![CDATA[", "").replaceAll("]]>", "");
-    myTransformer.parse(stingDAta);var document = myTransformer.toParker();var data = json.decode(document);
+    myTransformer.parse(stingDAta);
+    var document = myTransformer.toParker();
+    var data = json.decode(document);
     Transaction transaction = Transaction();
     transaction.sTATUS = '500';
     if (data != null && data['RESPONSE'] != null) {
@@ -425,62 +493,37 @@ class _AirPayState extends State<AirPay> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Image.asset(
-            'assets/airpays.png',
-            height: 40,
-            color: Colors.white,
-            width: 200,
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () => {
-              _showConfirmation(
-                  context, "Did you want to cancel this transaction ?")
-            },
-          ),
-          backgroundColor: Colors.blue[900],
-          actions: <Widget>[],
-        ),
-        body: Container(
-            child: Column(children: <Widget>[
-          Container(
-              // padding: EdgeInsets.all(10.0),
-              child: progress < 1.0
-                  ? SpinKitCircle(
-                      color: Colors.blue[900],
-                      size: 50.0,
-                    )
-                  : Container()),
-          (isShow
-              ? Expanded(
-                  child: InAppWebView(
-                    //initialUrl: URL,
-                    initialData: InAppWebViewInitialData(
-                      data: loadData(),
-                    ),
-                    initialHeaders: {},
-                    initialOptions: InAppWebViewGroupOptions(
-                      crossPlatform: InAppWebViewOptions(
-                        debuggingEnabled: true,
-                        useShouldOverrideUrlLoading: true,
-                      ),
-                      android: AndroidInAppWebViewOptions(
-                       // useOnRenderProcessGone: true,
-                        // useHybridComposition: true,
-                      )
-                    ),
-                    onTitleChanged:
-                        (InAppWebViewController controller, String url) {
-                      setState(() {
-                        print("onTitleChanged : $url");
-                      });
+        child: Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Image.asset(
+                'assets/airpays.png',
+                height: 40,
+                color: Colors.white,
+                width: 200,
+              ),
+              leading: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () => {
+                  _showConfirmation(
+                      context, "Did you want to cancel this transaction ?")
+                },
+              ),
+              backgroundColor: Colors.blue[900],
+              actions: <Widget>[],
+            ),
+            body: IndexedStack(index: _stackToView, children: [
+              Column(children: <Widget>[
+                Expanded(
+                  child: WebView(
+                    initialUrl: this.payURL,
+                    javascriptMode: JavascriptMode.unrestricted,
+                    onWebViewCreated: (WebViewController webViewController) {
+                      _controller.complete(webViewController);
                     },
-                    onWebViewCreated: (InAppWebViewController controller) {},
-                    onLoadStart:
-                        (InAppWebViewController controller, String url) {
+                    onPageStarted: (String url) {
+                      _handleLoad(1);
+
                       setState(() {
                         print("onLoadStart : $url");
                         var succesPath = getProtoDomain(widget.user.successUrl);
@@ -496,49 +539,60 @@ class _AirPayState extends State<AirPay> {
                         }
 
                         if (succesPath == webURLPath) {
-                          isShow = false;
+                          // isShow = false;
+                                                _handleLoad(1);
                           fetchDetails();
                           // print("onLoadStart : Success");
                         } else if (widget.user.failedUrl == webURLPath) {
                           userCancel('Transaction failed');
-                          print("onLoadStart : Failed");
+                          // print("onLoadStart : Failed");
                         }
                       });
                     },
-                    onLoadStop:
-                        (InAppWebViewController controller, String url) async {
-                      String ht = await controller.evaluateJavascript(
-                          source:
-                              "javascript:window.droid.print(document.getElementsByClassName('alert')[0].innerHTML);");
+                    onPageFinished: (controller) async {
+                      if (Platform.isAndroid && this.isFirst == true) {
+                        this.isFirst = false;
+                        Future.delayed(const Duration(seconds: 6), () {
+                          _handleLoad(0);
+                        });
+                      } else {
+                        _handleLoad(0);
+                      }
+                      var cntrl = (await _controller.future);
 
+                      final String url1 = await cntrl.currentUrl();
                       setState(() {
-                        this.url = url;
+                        this.url = url1;
                         var failurePath = widget.user
                             .failedUrl; //getProtoDomain(widget.user.failedUrl);
 
-                        if (url.startsWith(failurePath)) {
+                        if (this.url.startsWith(failurePath)) {
                           setState(() {
-                            // controller.loadUrl(url: ht);
-                            // print('ht: $url');
                             userCancel('Transaction failed');
-                            print('onLoad Stop in - $url');
+                            // print('onLoad Stop in - $url');
                           });
                         } else {
-                          print('on Load Stop: not error URL: $url');
+                          // print('on Load Stop: not error URL: $url');
                         }
                       });
                     },
-                    onProgressChanged:
-                        (InAppWebViewController controller, int progress) {
-                      setState(() {
-                        this.progress = progress / 100;
-                      });
+                    navigationDelegate: (NavigationRequest request) {
+                      // if (request.url.startsWith('https://www.youtube.com/')) {
+                      //   print('blocking navigation to $request}');
+                      //   return NavigationDecision.prevent;
+                      // }
+                      // print('allowing navigation to $request');
+                      return NavigationDecision.navigate;
                     },
                   ),
-                )
-              : Container()),
-        ])),
-      ),
-    );
+                ),
+              ]),
+              Container(
+                  child: Center(
+                      child: SpinKitCircle(
+                color: Colors.blue[900],
+                size: 50.0,
+              )))
+            ])));
   }
 }
