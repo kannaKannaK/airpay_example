@@ -75,18 +75,24 @@ class _HomeState extends State<Home> {
       currency: "356",isCurrency: "INR",chMode: "",customVar: "",txnSubtype: "",wallet: "0",successUrl: "http://www.theroadiesstore.in/airpay/transact/response"
         //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
     );*/
+ String domainPath = this.isSandbox
+        ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
+        : 'https://apmerchantapp.nowpay.co.in/index.html';
 
-    String domainPath = '';
+    String kAirPaySecretKey =
+        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
 
-    String kAirPaySecretKey = '';
+    String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
 
-    String kAirPayUserName =  '';
+    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'DtEte24X';
 
-    String kAirPayPassword = '';
+    String merchantID = this.isSandbox ? '24516' : '30057';
 
-    String merchantID = '';
+    String successURL = this.isSandbox
+        ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
+        : 'https://retail.airpay.co.in/index.html'; //https://secure.airpay.co.in/
+        
 
-    String successURL = '';
     UserRequest user = UserRequest(
         username: kAirPayUserName,
         password: kAirPayPassword,
@@ -111,7 +117,8 @@ class _HomeState extends State<Home> {
         txnSubtype: "",
         wallet: "0",
         isStaging: false, //True for the Staging
-        successUrl: successURL);
+        successUrl: successURL,
+        failedUrl: 'https://demo.nascorptechnologies.com/fasilure/');
 
 //         String errMsg = "";
 // if (user.secret.isEmpty) {
