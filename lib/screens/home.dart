@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:airpay_package/model/UserRequest.dart';
-import 'package:airpay_package/screens/inappwebview.dart';
+import 'package:airpay_package/airpay_package.dart';
 import 'package:alert_dialog/alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +53,21 @@ class _HomeState extends State<Home> {
     country.text = "India";
   }
 
+  onComplete(status, response) {
+    Navigator.pop(context);
+    if (status == true) {
+      if (response.sTATUS == '200') {
+        _showAlert(context, "Your payment is successful");
+      } else {
+        _showAlert(context,
+            "Your payment is failed due to \n ${response.tRANSACTIONREASON}");
+      }
+    } else {
+      _showAlert(context, "This payment is failed");
+    }
+    _showAlert(context, '${response.toJson()}');
+  }
+
   void _sendDatas() {
     /* User user = User(username :'8419743',password : 'JRLcAz5Y',secret: '74QpNYaT1oyqhxdL',merchantId : '1',fname : fname.text,
       lname :lname.text, email :email.text,phone :phone.text,fulladdress : full_address.text,
@@ -62,23 +76,17 @@ class _HomeState extends State<Home> {
         //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
     );*/
 
-    String domainPath = this.isSandbox
-        ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
-        : 'https://apmerchantapp.nowpay.co.in/index.html';
+    String domainPath = '';
 
-    String kAirPaySecretKey =
-        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
+    String kAirPaySecretKey = '';
 
-    String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
+    String kAirPayUserName =  '';
 
-    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'DtEte24X';
+    String kAirPayPassword = '';
 
-    String merchantID = this.isSandbox ? '24516' : '30057';
+    String merchantID = '';
 
-    String successURL = this.isSandbox
-        ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
-        : 'https://retail.airpay.co.in/index.html'; //https://secure.airpay.co.in/
-
+    String successURL = '';
     UserRequest user = UserRequest(
         username: kAirPayUserName,
         password: kAirPayPassword,
@@ -104,31 +112,39 @@ class _HomeState extends State<Home> {
         wallet: "0",
         isStaging: false, //True for the Staging
         successUrl: successURL);
+
+//         String errMsg = "";
+// if (user.secret.isEmpty) {
+//   errMsg = 'Enter your AirPay Secret Key in kAirPaySecretKey';
+// }
+// else if (user.merchantId.isEmpty) {
+//   errMsg = 'Enter your AirPay MerchantID';
+// }
+// else if (user.password.isEmpty) {
+//   errMsg = 'Enter your AirPay password';
+// }
+// else if (user.username.isEmpty) {
+//   errMsg = 'Enter your AirPay Username';
+// }
+// else if (user.successUrl.isEmpty) {
+//   errMsg = 'Enter your AirPay successUrl';
+// }
+// else if (user.protoDomain.isEmpty) {
+//   errMsg = 'Enter your AirPay protoDomain';
+// }
+// if (errMsg.isNotEmpty) {
+//     _showAlert(context, errMsg + '\n to proceed with the demo app you must enter the required details to proceed.');
+//     return;
+// }
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => new AirPay(user: user),
+        builder: (BuildContext context) => new AirPay(
+            user: user,
+            closure: (status, response) => {onComplete(status, response)}),
       ),
-    ).then((val) {
-      if (val != null) {
-        if (val is bool) {
-          isSuccess = val;
-          if (isSuccess == true) {
-            _showAlert(context, "Your payment is successful");
-          } else {
-            _showAlert(context, "Payment has been cancelled or failed");
-          }
-        } else if (val.sTATUS != null) {
-          if (val.sTATUS == '200') {
-            _showAlert(context, "Your payment is successful");
-          } else {
-            _showAlert(
-                context, "Your payment is failed \n ${val.tRANSACTIONREASON}");
-          }
-          _showAlert(context, '${val.toJson()}');
-        }
-      }
-    });
+    );
   }
 
   // ignore: unused_element
@@ -194,29 +210,33 @@ class _HomeState extends State<Home> {
               )
             : new AlertDialog(
                 title: Text(title),
-                content: new Container(
-                    height: 110,
-                    child: new Column(
-                      children: [
-                        Text(message1),
-                        new Container(
-                          margin: EdgeInsets.all(8.0),
-                          child: RaisedButton(
-                            padding: EdgeInsets.all(2.0),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Colors.blue[900],
-                            child: Text(
-                              'Okay',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 24.0),
-                            ),
-                          ),
-                        )
-                      ],
-                    )),
-                actions: <Widget>[],
+                content: Container(
+                    height: 140.0,
+                    width: 400.0,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (BuildContext context, int index) {
+                          return new Column(children: <Widget>[
+                            Text(message1),
+                          ]);
+                        })),
+                actions: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      padding: EdgeInsets.all(2.0),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: Colors.blue[900],
+                      child: Text(
+                        'Okay',
+                        style: TextStyle(color: Colors.white, fontSize: 24.0),
+                      ),
+                    ),
+                  )
+                ],
               );
       },
     );
