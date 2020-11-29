@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        String title = "Server Manager";
+        String title = "Airpay";
         String message1 = message;
         return Platform.isIOS
             ? new CupertinoAlertDialog(
