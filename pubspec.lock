@@ -4,12 +4,10 @@ packages:
   airpay_package:
     dependency: "direct main"
     description:
-      path: "."
-      ref: main
-      resolved-ref: "3669fe51a79a8b3129ab013f6a690bbcd2c513d5"
-      url: "https://github.com/kannaKannaK/airpay_package"
-    source: git
-    version: "1.0.0"
+      name: airpay_package
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+1"
   alert_dialog:
     dependency: "direct main"
     description:
