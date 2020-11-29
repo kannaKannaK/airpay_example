@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
       currency: "356",isCurrency: "INR",chMode: "",customVar: "",txnSubtype: "",wallet: "0",successUrl: "http://www.theroadiesstore.in/airpay/transact/response"
         //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
     );*/
- String domainPath = this.isSandbox
+    String domainPath = this.isSandbox
         ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://apmerchantapp.nowpay.co.in/index.html';
 
@@ -91,7 +91,6 @@ class _HomeState extends State<Home> {
     String successURL = this.isSandbox
         ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
         : 'https://retail.airpay.co.in/index.html'; //https://secure.airpay.co.in/
-        
 
     UserRequest user = UserRequest(
         username: kAirPayUserName,
