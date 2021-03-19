@@ -53,44 +53,33 @@ class _HomeState extends State<Home> {
     country.text = "India";
   }
 
-  onComplete(status, response) {
+  onComplete(BuildContext context2, status, response) {
     Navigator.pop(context);
     if (status == true) {
       if (response.sTATUS == '200') {
-        _showAlert(context, "Your payment is successful");
+        _showAlert(context2, "Your payment is successful");
       } else {
-        _showAlert(context,
+        _showAlert(context2,
             "Your payment is failed due to \n ${response.tRANSACTIONREASON}");
       }
     } else {
-      _showAlert(context, "This payment is failed");
+      _showAlert(context2, "This payment is failed");
     }
-    _showAlert(context, '${response.toJson()}');
+    _showAlert(context2, '${response.toJson()}');
   }
 
   void _sendDatas() {
-    /* User user = User(username :'8419743',password : 'JRLcAz5Y',secret: '74QpNYaT1oyqhxdL',merchantId : '1',fname : fname.text,
-      lname :lname.text, email :email.text,phone :phone.text,fulladdress : full_address.text,
-      pincode:pincode.text,orderid: order_id.text,amount: amount.text,city : city.text,state :state.text,country :country.text,
-      currency: "356",isCurrency: "INR",chMode: "",customVar: "",txnSubtype: "",wallet: "0",successUrl: "http://www.theroadiesstore.in/airpay/transact/response"
-        //,failedUrl: "https://cos.stfc.in/COS/COS_UI/COS_PaymentReceive.aspx"
-    );*/
-    String domainPath = this.isSandbox
-        ? 'http://demo.nascorptechnologies.com/gw/pgResp/airpay'
-        : 'https://apmerchantapp.nowpay.co.in/index.html';
+    String domainPath = 'https://intschoolpay.nowpay.co.in/pay/index.php';
 
-    String kAirPaySecretKey =
-        this.isSandbox ? 'rAa9fvRTuMx5gGMZ' : '6UnpYTPm2fBweTKH';
+    String kAirPaySecretKey = 'CpZh8f3BDsFb8V9H';
 
-    String kAirPayUserName = this.isSandbox ? '2953945' : '3967423';
+    String kAirPayUserName = '1222411';
 
-    String kAirPayPassword = this.isSandbox ? '2YfVuCSV' : 'DtEte24X';
+    String kAirPayPassword = 'qSCEdn9f';
 
-    String merchantID = this.isSandbox ? '24516' : '30057';
+    String merchantID = '32250';
 
-    String successURL = this.isSandbox
-        ? 'https://demo.nascorptechnologies.com/gw/pgResp/airpay'
-        : 'https://retail.airpay.co.in/index.html'; //https://secure.airpay.co.in/
+    String successURL = '##SuccessURL##';
 
     UserRequest user = UserRequest(
         username: kAirPayUserName,
@@ -119,74 +108,17 @@ class _HomeState extends State<Home> {
         successUrl: successURL,
         failedUrl: 'https://demo.nascorptechnologies.com/fasilure/');
 
-//         String errMsg = "";
-// if (user.secret.isEmpty) {
-//   errMsg = 'Enter your AirPay Secret Key in kAirPaySecretKey';
-// }
-// else if (user.merchantId.isEmpty) {
-//   errMsg = 'Enter your AirPay MerchantID';
-// }
-// else if (user.password.isEmpty) {
-//   errMsg = 'Enter your AirPay password';
-// }
-// else if (user.username.isEmpty) {
-//   errMsg = 'Enter your AirPay Username';
-// }
-// else if (user.successUrl.isEmpty) {
-//   errMsg = 'Enter your AirPay successUrl';
-// }
-// else if (user.protoDomain.isEmpty) {
-//   errMsg = 'Enter your AirPay protoDomain';
-// }
-// if (errMsg.isNotEmpty) {
-//     _showAlert(context, errMsg + '\n to proceed with the demo app you must enter the required details to proceed.');
-//     return;
-// }
-
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => new AirPay(
             user: user,
-            closure: (status, response) => {onComplete(status, response)}),
+            closure: (status, response) => {onComplete(context, status, response)}),
       ),
     );
   }
 
-  // ignore: unused_element
-  _showLoader(context, message) async {
-    await showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        String title = "Airpay";
-        String message1 = message;
-        return Platform.isIOS
-            ? new CupertinoAlertDialog(
-                title: Text(title),
-                content: Text(message1),
-                actions: <Widget>[
-                  new Container(
-                    color: Colors.white60,
-                    width: 30.0,
-                    height: 80.0,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                ],
-              )
-            : alert(
-                context,
-                title: Text(title),
-                content: Text(message1),
-                textOK: Text('Okay'),
-              );
-      },
-    );
-  }
-
-  _showAlert(context, message) async {
+  _showAlert(BuildContext context, message) async {
     await showDialog<String>(
       context: context,
       barrierDismissible: false,
@@ -200,6 +132,7 @@ class _HomeState extends State<Home> {
                 actions: <Widget>[
                   new Container(
                     margin: EdgeInsets.all(8.0),
+                    // ignore: deprecated_member_use
                     child: RaisedButton(
                       padding: EdgeInsets.all(12.0),
                       onPressed: () {
@@ -214,36 +147,7 @@ class _HomeState extends State<Home> {
                   )
                 ],
               )
-            : new AlertDialog(
-                title: Text(title),
-                content: Container(
-                    height: 140.0,
-                    width: 400.0,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return new Column(children: <Widget>[
-                            Text(message1),
-                          ]);
-                        })),
-                actions: <Widget>[
-                  new Container(
-                    margin: EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(2.0),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: Colors.blue[900],
-                      child: Text(
-                        'Okay',
-                        style: TextStyle(color: Colors.white, fontSize: 24.0),
-                      ),
-                    ),
-                  )
-                ],
-              );
+            : new Container();
       },
     );
   }
