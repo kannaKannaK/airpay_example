@@ -5,3 +5,7 @@
 ## 1.0.0+3
 
 * Fix example in the readme.
+
+## 1.1.0
+
+* Airpay Example.
