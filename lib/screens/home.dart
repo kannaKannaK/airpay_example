@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:airpay_package/airpay_package.dart';
-import 'package:alert_dialog/alert_dialog.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -53,33 +53,30 @@ class _HomeState extends State<Home> {
     country.text = "India";
   }
 
-  onComplete(BuildContext context2, status, response) {
+  onComplete(status, response) {
     Navigator.pop(context);
-    if (status == true) {
-      if (response.sTATUS == '200') {
-        _showAlert(context2, "Your payment is successful");
-      } else {
-        _showAlert(context2,
-            "Your payment is failed due to \n ${response.tRANSACTIONREASON}");
-      }
-    } else {
-      _showAlert(context2, "This payment is failed");
-    }
-    _showAlert(context2, '${response.toJson()}');
+    AwesomeDialog(
+            context: context,
+            dialogType: DialogType.INFO,
+            headerAnimationLoop: true,
+            animType: AnimType.BOTTOMSLIDE,
+            title: "Airpay",
+            desc: '${response.toJson()}')
+        .show();
   }
 
   void _sendDatas() {
     String domainPath = 'https://intschoolpay.nowpay.co.in/pay/index.php';
 
-    String kAirPaySecretKey = 'CpZh8f3BDsFb8V9H';
+    String kAirPaySecretKey = isSandbox ? 'A3brM5V9wjMWZh29' : 'CpZh8f3BDsFb8V9H';
 
-    String kAirPayUserName = '1222411';
+    String kAirPayUserName = isSandbox ? '5926256' : '1222411';
 
-    String kAirPayPassword = 'qSCEdn9f';
+    String kAirPayPassword = isSandbox ? 'me65Pf2K' : 'qSCEdn9f';
 
-    String merchantID = '32250';
+    String merchantID = isSandbox ? '40594' : '32250';
 
-    String successURL = '##SuccessURL##';
+    String successURL = 'https://intschoolpay.nowpay.co.in/"'; //'https://www.mosaics.amelio.in/';
 
     UserRequest user = UserRequest(
         username: kAirPayUserName,
@@ -113,13 +110,13 @@ class _HomeState extends State<Home> {
       MaterialPageRoute(
         builder: (BuildContext context) => new AirPay(
             user: user,
-            closure: (status, response) => {onComplete(context, status, response)}),
+            closure: (status, response) => {onComplete(status, response)}),
       ),
     );
   }
 
-  _showAlert(BuildContext context, message) async {
-    await showDialog<String>(
+  Future<void> _showAlert(BuildContext context, message) async {
+    await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -147,7 +144,14 @@ class _HomeState extends State<Home> {
                   )
                 ],
               )
-            : new Container();
+            : AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.INFO,
+                    headerAnimationLoop: true,
+                    animType: AnimType.BOTTOMSLIDE,
+                    title: title,
+                    desc: message1)
+                .show();
       },
     );
   }
@@ -496,12 +500,12 @@ class _HomeState extends State<Home> {
                 ),
                 Container(
                   margin: EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
+                  child: ElevatedButton(
+                    // padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                     onPressed: () {
                       _sendDatas();
                     },
-                    color: Colors.blue[900],
+                    // color: Colors.blue[900],
                     child: Text(
                       'NEXT',
                       style: TextStyle(color: Colors.white, fontSize: 20),
@@ -510,12 +514,12 @@ class _HomeState extends State<Home> {
                 ),
                 Container(
                   margin: EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
+                  child: ElevatedButton(
+                    // padding: EdgeInsets.fromLTRB(2.0, 11.0, 2.0, 11.0),
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    color: Colors.blue[900],
+                    // color: Colors.blue[900],
                     child: Text(
                       'BACK',
                       style: TextStyle(color: Colors.white, fontSize: 20),
